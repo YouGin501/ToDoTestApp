@@ -14,8 +14,8 @@ namespace ToDoTestApp.Models
         [MaxLength(300), Column(TypeName = "nvarchar(300)")]
         public string Description { get; set; } = "Description";
 
-        public DateTime CreatedDate { get; set; } = DateTime.Now;
-        public DateTime ModifiedDate { get; set; } = DateTime.Now;
+        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
+        public DateTime ModifiedDate { get; set; } = DateTime.UtcNow;
 
         public bool Done { get; set; } = false;
 

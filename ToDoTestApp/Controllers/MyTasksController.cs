@@ -23,10 +23,10 @@ namespace ToDoTestApp.Controllers
         }
 
         // GET: MyTasks
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(Filter? filter, string? sortBy)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            return View(await _service.GetTasksForUser(userId, null));
+            return View(await _service.GetTasksForUser(userId, filter, sortBy));
         }
 
         // GET: MyTasks/Details/5

@@ -38,7 +38,7 @@ namespace ToDoTestApp.Services
             }
 
         }
-        public async Task<IEnumerable<MyTaskDTO>> GetTasksForUser(string userId, Filter? filter)
+        public async Task<IEnumerable<MyTaskDTO>> GetTasksForUser(string userId, Filter? filter, string? sortBy)
         {
             var tasks = await context.MyTasks.Where(x => x.UserId == userId).ToListAsync();
             var tasksDTOs = new List<MyTaskDTO>();
@@ -57,7 +57,20 @@ namespace ToDoTestApp.Services
                     });
             }
 
-            if (filter==null || filter.All)
+            switch (sortBy)
+            {
+                case "title":
+                    tasksDTOs.Sort((x, y) => string.Compare(x.Title, y.Title, StringComparison.OrdinalIgnoreCase));
+                    break;
+                case "levelOfImportance":
+                    tasksDTOs.Sort((x, y) => y.LevelOfImportance.CompareTo(x.LevelOfImportance));
+                    break;
+                case "done":
+                    tasksDTOs.Sort((x, y) => y.Done.CompareTo(x.Done));
+                    break;
+            }
+
+            if (filter == null || filter.Done == null)
                 return tasksDTOs;
 
             if(filter.LevelOfImportance != null)
@@ -137,5 +150,6 @@ namespace ToDoTestApp.Services
             context.MyTasks.Remove(task);
             await context.SaveChangesAsync();
         }
+
     }
 }

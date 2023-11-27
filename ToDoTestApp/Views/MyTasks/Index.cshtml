@@ -2,58 +2,101 @@
 
 @{
     ViewData["Title"] = "Index";
+    string GetImportanceColor(int level)
+    {
+        switch (level)
+        {
+            case 1:
+                return "#28a745"; // Green
+            case 2:            
+                return "#218838"; // Darker green
+            case 3:            
+                return "#ffc107"; // Yellow
+            case 4:            
+                return "#f8d7da"; // Light red
+            case 5:            
+                return "#dc3545"; // Red
+            default:
+                return "#000"; // Black (default if level is not 1-5)
+        }
+    }
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
+<p class="text-center">
+    <button class="register-button" onclick="Create"><a asp-action="Create"> Create New</a></button>    
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Done)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LevelOfImportance)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UserId)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Done)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LevelOfImportance)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="container mt-4">
+
+    <div class="row">
+        <div class="col-3">
+            <form method="get">
+                <div class="row">
+                    <div class="col">
+                        <label for="importanceFilter" class="form-label">Filter by Importance:</label>
+                        <select class="form-select" id="importanceFilter" name="levelOfImportance">
+                            <option value="">All</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                        <label for="doneFilter" class="form-label">Filter by Done Status:</label>
+                        <select class="form-select" id="doneFilter" name="done">
+                            <option value="">All</option>
+                            <option value="true">Done</option>
+                            <option value="false">Not Done</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Apply Filters</button>
+            </form>
+            <form method="get">
+                <div class="row">
+                    <div class="col">
+                        <label for="sortFilter" class="form-label">Sort by:</label>
+                        <select class="form-select" id="sortFilter" name="sortBy">
+                            <option value="title">Title</option>
+                            <option value="levelOfImportance">Level of importance</option>
+                            <option value="done">Done status</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Apply Sorting</button>
+            </form>
+        </div>
+        <div class="col-9">
+            <div class="row row-cols-1 row-cols-md-4 g-4">
+                @foreach (var task in Model)
+                {
+                    <div class="col">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title text-center">@task.Title</h5>
+                                <p class="card-text text-center">@task.Description.Substring(0, Math.Min(25, task.Description.Length))</p>
+                                <div class="mb-2">
+                                    <small class="text-muted importance-square" style="background-color: @GetImportanceColor(task.LevelOfImportance)"></small>
+                                    <strong class="ms-2">Importance:</strong> @task.LevelOfImportance
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="doneCheckbox" disabled="disabled" checked="@task.Done">
+                                    <label class="form-check-label" for="doneCheckbox">
+                                        Done
+                                    </label>
+                                </div>
+                                <div class="task-container">
+                                    <a style="text-decoration: none" href="@Url.Action("Details", "MyTasks", new { id = task.ID })">📄</a>
+                                    <a style="text-decoration: none" href="@Url.Action("Edit", "MyTasks", new { id = task.ID })">✏️</a>
+                                    <a style="text-decoration: none" href="@Url.Action("Delete", "MyTasks", new { id = task.ID })">🗑️</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    
+    
+</div>

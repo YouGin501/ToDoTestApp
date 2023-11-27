@@ -2,11 +2,28 @@
 
 @{
     ViewData["Title"] = "Create";
+    string GetImportanceColor(int level)
+    {
+        switch (level)
+        {
+            case 1:
+                return "#28a745"; // Green
+            case 2:
+                return "#218838"; // Darker green
+            case 3:
+                return "#ffc107"; // Yellow
+            case 4:
+                return "#f8d7da"; // Light red
+            case 5:
+                return "#dc3545"; // Red
+            default:
+                return "#000"; // Black (default if level is not 1-5)
+        }
+    }
 }
 
 <h1>Create</h1>
 
-<h4>MyTask</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -29,7 +46,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="LevelOfImportance" class="control-label"></label>
-                <input asp-for="LevelOfImportance" class="form-control" />
+                <input asp-for="LevelOfImportance" class="form-control" type="number" min="1" max="5" />
                 <span asp-validation-for="LevelOfImportance" class="text-danger"></span>
             </div>
             <div class="form-group">

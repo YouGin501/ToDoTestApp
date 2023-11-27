@@ -6,7 +6,7 @@ namespace ToDoTestApp.Services.Contracts
     public interface IMyTaskService
     {
         Task<MyTaskDTO> GetTaskById(int id);
-        Task<IEnumerable<MyTaskDTO>> GetTasksForUser(string userId, Filter? filter);
+        Task<IEnumerable<MyTaskDTO>> GetTasksForUser(string userId, Filter? filter, string? sortBy);
         Task<MyTaskDTO> AddTask(MyTaskDTO task, string userName);
         Task<MyTaskDTO> UpdateTask(int taskId, MyTaskDTO task);
         Task DeleteTask(int taskId);

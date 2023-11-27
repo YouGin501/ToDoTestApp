@@ -2,46 +2,45 @@
 
 @{
     ViewData["Title"] = "Details";
+    string GetImportanceColor(int level)
+    {
+        switch (level)
+        {
+            case 1:
+                return "#28a745"; // Green
+            case 2:
+                return "#218838"; // Darker green
+            case 3:
+                return "#ffc107"; // Yellow
+            case 4:
+                return "#f8d7da"; // Light red
+            case 5:
+                return "#dc3545"; // Red
+            default:
+                return "#000"; // Black (default if level is not 1-5)
+        }
+    }
 }
 
 <h1>Details</h1>
 
-<div>
-    <h4>MyTask</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Done)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Done)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LevelOfImportance)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LevelOfImportance)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UserId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UserId)
-        </dd>
-    </dl>
+<div class="card h-100 w-25">
+    <div class="card-body">
+        <h5 class="card-title">@Model.Title</h5>
+        <p class="card-text">@Model.Description</p>
+        <div class="mb-2">
+            <small class="text-muted importance-square" style="background-color: @GetImportanceColor(Model.LevelOfImportance)"></small>
+            <strong class="ms-2">Importance:</strong> @Model.LevelOfImportance
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="doneCheckbox" disabled="disabled" checked="@Model.Done">
+            <label class="form-check-label" for="doneCheckbox">
+                Done
+            </label>
+        </div>
+    </div>
 </div>
+
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.ID">Edit</a> |
     <a asp-action="Index">Back to List</a>
