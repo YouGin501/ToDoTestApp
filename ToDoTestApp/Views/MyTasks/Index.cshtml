@@ -74,7 +74,7 @@
                         <div class="card h-100">
                             <div class="card-body">
                                 <h5 class="card-title text-center">@task.Title</h5>
-                                <p class="card-text text-center">@task.Description.Substring(0, Math.Min(25, task.Description.Length))</p>
+                                <p class="card-text text-center">@task.Description.Substring(0, Math.Min(20, task.Description.Length))</p>
                                 <div class="mb-2">
                                     <small class="text-muted importance-square" style="background-color: @GetImportanceColor(task.LevelOfImportance)"></small>
                                     <strong class="ms-2">Importance:</strong> @task.LevelOfImportance
