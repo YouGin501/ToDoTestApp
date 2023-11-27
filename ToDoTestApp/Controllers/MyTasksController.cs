@@ -26,13 +26,26 @@ namespace ToDoTestApp.Controllers
         public async Task<IActionResult> Index(Filter? filter, string? sortBy)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            return View(await _service.GetTasksForUser(userId, filter, sortBy));
+            if (!String.IsNullOrEmpty(userId))
+            {
+                return View(await _service.GetTasksForUser(userId, filter, sortBy));
+            }
+            else
+            {
+                return BadRequest("You don`t have access");
+            }
         }
 
         // GET: MyTasks/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (String.IsNullOrEmpty(userId))
+            {
+                return BadRequest("You don`t have access");
+            }
+
+                if (id == null)
             {
                 return NotFound();
             }
@@ -49,6 +62,11 @@ namespace ToDoTestApp.Controllers
         // GET: MyTasks/Create
         public IActionResult Create()
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (String.IsNullOrEmpty(userId))
+            {
+                return BadRequest("You don`t have access");
+            }
             return View();
         }
 
@@ -60,6 +78,10 @@ namespace ToDoTestApp.Controllers
         public async Task<IActionResult> Create([Bind("ID,Title,Description,Done,Deleted,LevelOfImportance")] MyTaskDTO myTaskDTO)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (String.IsNullOrEmpty(userId))
+            {
+                return BadRequest("You don`t have access");
+            }
             var result = await _service.AddTask(myTaskDTO, userId);
             return RedirectToAction("Index");
         }
@@ -67,6 +89,11 @@ namespace ToDoTestApp.Controllers
         // GET: MyTasks/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (String.IsNullOrEmpty(userId))
+            {
+                return BadRequest("You don`t have access");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -87,6 +114,11 @@ namespace ToDoTestApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ID,Title,Description,Done,Deleted,LevelOfImportance")] MyTaskDTO myTaskDTO)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (String.IsNullOrEmpty(userId))
+            {
+                return BadRequest("You don`t have access");
+            }
             if (id != myTaskDTO.ID)
             {
                 return NotFound();
@@ -99,6 +131,11 @@ namespace ToDoTestApp.Controllers
         // GET: MyTasks/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (String.IsNullOrEmpty(userId))
+            {
+                return BadRequest("You don`t have access");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -118,6 +155,11 @@ namespace ToDoTestApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (String.IsNullOrEmpty(userId))
+            {
+                return BadRequest("You don`t have access");
+            }
             await _service.DeleteTask(id);
             return RedirectToAction(nameof(Index));
         }
